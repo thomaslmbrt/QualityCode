@@ -6,7 +6,7 @@ public class LinkedList {
 
     public LinkedList(Object data) {
         this.head = new Node(data);
-        this.length = 0;
+        this.length = 1;
     }
 
     public void addAtEnd(Object data) {
@@ -85,7 +85,7 @@ public class LinkedList {
     public Node getNodeByValue(Object value) {
         Node    cursor = this.head;
 
-        while (cursor.getNext() != null) {
+        while (cursor != null) {
             if (cursor.getData() == value) {
                 return cursor;
             }
