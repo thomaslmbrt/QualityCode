@@ -1,85 +1,173 @@
-public class LinkedList {
+class LinkedList {
 
-    private Node    head = null;
+    private Node    head;
+    private Integer length;
+    private static final Integer BEFORE_POSITION = 1;
 
-    public LinkedList() {
-        this.head = null;
+    public LinkedList(Object data) {
+        this.head = new Node(data);
+        this.length = 0;
     }
 
-    public Node getHead() {
-        return this.head;
-    }
-    public void setHead(Node queue) {
-        this.head = queue;
-    }
+    public void addAtEnd(Object data) {
+        Node navigator = this.head;
 
-    public void addAtHead(int value) {
-        Node newNode = new Node(value);
-
-        newNode.setNext(this.head);
-        this.head = newNode;
-    }
-
-    public void addAtQueue(int value) {
-        Node newNode = new Node(value);
-
-        Node actualNode = this.head;
-
-        while (actualNode != null && actualNode.getNext() != null) {
-            actualNode = actualNode.getNext();
+        while (navigator.getNext() != null) {
+            navigator = navigator.getNext();
         }
 
-        newNode.setNext(null);
-        actualNode.setNext(newNode);
+        navigator.setNext(new Node(data));
+
+        this.length++;
     }
 
-    public void addAtPosition(int value, int position) {
-        Node    newNode = new Node(value);
-        Node    actualNode = this.getNodeBeforePosition(position);
+    public void addAtPos(Object data, Integer position) {
+        Node cursor = this.head;
+        Node holder = null;
+        Node newNode = new Node(data);
+        Integer index = 1;
 
-        System.out.println("actual node:" + actualNode.getValue());
-        if (actualNode.getNext() != null) {
-            newNode.setNext(actualNode.getNext());
+        if (position > this.length) {
+            throw new Error("[-] addAtPos : Given position is invalid.");
         }
-        actualNode.setNext(newNode);
+
+        if (this.length == 0) {
+            throw new Error("[-] addAtPos : Impossible to delete node at this pos, list is empty.");
+        }
+
+        while (cursor.getNext() != null && position != index) {
+            cursor = cursor.getNext();
+            index++;
+        }
+
+        if (index == position) {
+            holder = cursor.getNext();
+
+            cursor.setNext(newNode);
+
+            newNode.setNext(holder);
+            length++;
+
+            if (index == 0) {
+                this.head = cursor;
+            }
+        }
     }
 
-    public int getAtPosition(int position) {
-        int     nodeCount = 1;
-        Node    actualNode = this.head;
+    public void addAtHead(Object data) {
+        Node newHead = new Node(data);
 
-        while (actualNode != null && actualNode.getNext() != null && nodeCount < position) {
-            nodeCount++;
-            actualNode = actualNode.getNext();
-        }
-
-        return actualNode.getValue();
+        newHead.setNext(this.head);
+        this.head = newHead;
+        this.length++;
     }
 
-    public int getLength() {
-        int     nodeCount = 0;
-        Node    actualNode = this.head;
+    public Node getNodeAtPos(Integer position) {
+        Node cursor = this.head;
+        Integer index = 1;
 
-        while (actualNode != null) {
-            nodeCount++;
-            System.out.println("Node value" + actualNode.getValue());
-            actualNode = actualNode.getNext();
+        if (position > this.length) {
+            throw new Error("[-] getNodeAtPos : Given position is invalid.");
         }
 
-        return nodeCount;
+        while (cursor.getNext() != null && index != position) {
+            cursor = cursor.getNext();
+            index++;
+        }
+
+        if (index == position) {
+            return cursor;
+        }
+
+        return null;
     }
 
-    private Node getNodeBeforePosition(int position) {
-        int     beforePos = 1;
-        int     nodeCount = 1;
-        Node    actualNode = this.head;
+    public Node getNodeByValue(Object value) {
+        Node cursor = this.head;
 
-        while (actualNode != null && actualNode.getNext() != null && nodeCount < position - beforePos) {
-            nodeCount++;
+        while (cursor.getNext() != null) {
+            if (cursor.getData() == value) {
+                return cursor;
+            }
+            cursor = cursor.getNext();
+        }
+        return null;
+    }
 
-            actualNode = actualNode.getNext();
+    public void deleteAtPos(Integer position) {
+        Node cursor = this.head;
+        Integer index = 1;
+
+        if (position > this.length) {
+            throw new Error("[-] deleteAtPos : Given position is invalid.");
         }
 
-        return actualNode;
+        if (this.length == 0) {
+            throw new Error("[-] deleteAtPos : Impossible to delete node at this pos, list is empty.");
+        }
+
+        while (index < position - BEFORE_POSITION) {
+            cursor = cursor.getNext();
+            index++;
+        }
+
+        if (index == 1) {
+            this.head = this.head.getNext();
+            this.length--;
+        }
+
+        else if (index == position - BEFORE_POSITION) {
+            cursor.setNext(cursor.getNext().getNext());
+            this.length--;
+        }
+
+        else {
+            throw new Error("[-] deleteAtPos : Node not found.");
+        }
+    }
+
+    public void deleteByValue(Object data) {
+        Node cursor = this.head;
+
+        if (this.length == 0) {
+            throw new Error("[-] deleteByValue : Impossible to delete node by value, list is empty.");
+        }
+
+        if (data == null) {
+            throw new Error("[-] deleteByValue : Data is empty.");
+        }
+
+        if (this.head.getData() == data) {
+            this.head = this.head.getNext();
+            this.length--;
+            return ;
+        }
+
+        while (cursor.getNext() != null && cursor.getNext().getData() != data) {
+            cursor = cursor.getNext();
+        }
+
+        if (cursor.getNext().getData() == data) {
+            cursor.setNext(cursor.getNext().getNext());
+            this.length--;
+        }
+
+        else {
+            throw new Error("[-] deleteByValue : Node not found.");
+        }
+    }
+
+    public void printList() {
+        Node cursor = this.head;
+
+        while (cursor != null)
+        {
+            System.out.println(cursor.getData());
+            cursor = cursor.getNext();
+        }
+    }
+
+    public Integer getLength() {
+        return this.length;
     }
 }

@@ -1,29 +1,11 @@
 public class Node {
 
-    private int     value;
-
-    //private Node    prev;
+    private Object  data;
     private Node    next;
 
-    public Node(int value) {
-        this.value = value;
-        //this.prev = null;
-        this.next = null;
+    public Node(Object data) {
+        this.data = data;
     }
-
-    public int  getValue() {
-        return this.value;
-    }
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    /* public Node getPrev() {
-        return this.prev;
-    }
-    public void setPrev(Node prev) {
-        this.prev = prev;
-    } */
 
     public Node getNext() {
         return this.next;
@@ -32,4 +14,10 @@ public class Node {
         this.next = next;
     }
 
+    public Object getData() {
+        return this.data;
+    }
+    public void setData(Object data) {
+        this.data = data;
+    }
 }
